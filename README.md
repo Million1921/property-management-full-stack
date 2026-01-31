@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # House Management System - Product Requirements Document (PRD)
 
 ## Overview
@@ -605,3 +606,7 @@ For testing and initial access, use the following administrator credentials:
 - Soft delete not implemented (can be added later)
 - Single admin/landlord system (multi-tenant can be added later)
 - No email notifications in initial version
+=======
+# property-management-full-stack
+A Property Management System is a web-based platform that helps manage tenants, leases, rent collection, and maintenance tasks efficiently. It automates operations, tracks finances, generates reports, and improves communication, enhancing overall property management and decision-making.
+>>>>>>> 65bcef98b51193de269b0b32d5c3f9fe01d74515
