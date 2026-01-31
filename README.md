@@ -1,4 +1,4 @@
-# House Management System
+# Property Management System
 
 A comprehensive web-based property management system designed to streamline the management of residents, rooms, utility bills, maintenance requests, and payments. Built with a modern tech stack ensuring performance and scalability.
 
