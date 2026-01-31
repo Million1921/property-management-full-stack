@@ -117,8 +117,10 @@ The system uses a relational database structure:
 - **Payments**: Records of transactions against bills.
 - **Maintenance**: Requests tracked by room/resident.
 
-*(See `server/src/*/entities` for full schema definitions)*
 
 ## 📜 License
 
-Internal Use - prototype for Ethio Telecom.
+- Internal Use - Ethio Telecom.
+
+
+
