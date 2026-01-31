@@ -81,7 +81,7 @@ const RoomForm: React.FC<RoomFormProps> = ({ room, onSubmit, onCancel, isLoading
         />
 
         <Input
-          label="Base Rent ($)"
+          label="Base Rent (Br)"
           type="number"
           step="0.01"
           {...register('base_rent', { valueAsNumber: true })}

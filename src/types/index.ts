@@ -145,6 +145,8 @@ export interface DashboardStats {
   pendingPayments: number
   totalPendingAmount: number
   collectionRate: number
+  pendingBills: number
+  maintenanceRequests: number
   revenueData: Array<{
     month: string
     revenue: number

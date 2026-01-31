@@ -24,10 +24,10 @@ const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'ETB',
       notation: 'compact',
       maximumFractionDigits: 1,
-    }).format(value)
+    }).format(value).replace('ETB', 'Br')
   }
 
   const CustomTooltip = ({ active, payload, label }: any) => {

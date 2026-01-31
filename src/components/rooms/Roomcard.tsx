@@ -16,8 +16,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onEdit, onDelete, onViewDetai
   const dropdownItems = [
     { label: 'View Details', onClick: () => onViewDetails(room.id) },
     { label: 'Edit Room', onClick: () => onEdit(room) },
-    { label: 'Assign Resident', onClick: () => {} },
-    { label: 'View History', onClick: () => {} },
+    { label: 'Assign Resident', onClick: () => { } },
+    { label: 'View History', onClick: () => { } },
     { label: 'Delete Room', onClick: () => onDelete(room.id), destructive: true },
   ]
 
@@ -63,7 +63,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onEdit, onDelete, onViewDetai
 
           <div className="flex items-center text-gray-600">
             <DollarSign className="w-4 h-4 mr-2" />
-            <span className="text-sm font-medium">${room.base_rent}/month</span>
+            <span className="text-sm font-medium">Br {room.base_rent}/month</span>
           </div>
 
           {room.description && (

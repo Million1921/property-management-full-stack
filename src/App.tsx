@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import PrivateRoute from './components/common/PrivateRoute'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
@@ -34,51 +35,53 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <AuthProvider>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#10b981',
-                  secondary: '#fff',
-                },
-              },
-              error: {
+        <ThemeProvider>
+          <AuthProvider>
+            <Toaster
+              position="top-right"
+              toastOptions={{
                 duration: 4000,
-                iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
+                style: {
+                  background: '#363636',
+                  color: '#fff',
                 },
-              },
-            }}
-          />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
-              <Route index element={<Dashboard />} />
-              <Route path="rooms" element={<Rooms />} />
-              <Route path="rooms/:id" element={<RoomDetail />} />
-              <Route path="residents" element={<Residents />} />
-              <Route path="residents/:id" element={<ResidentDetail />} />
-              <Route path="bills" element={<Bills />} />
-              <Route path="bills/:id" element={<BillDetail />} />
-              <Route path="payments" element={<Payments />} />
-              <Route path="utilities" element={<Utilities />} />
-              <Route path="maintenance" element={<Maintenance />} />
-              <Route path="announcements" element={<Announcements />} />
-              <Route path="reports" element={<Reports />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </AuthProvider>
+                success: {
+                  duration: 3000,
+                  iconTheme: {
+                    primary: '#10b981',
+                    secondary: '#fff',
+                  },
+                },
+                error: {
+                  duration: 4000,
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#fff',
+                  },
+                },
+              }}
+            />
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
+                <Route index element={<Dashboard />} />
+                <Route path="rooms" element={<Rooms />} />
+                <Route path="rooms/:id" element={<RoomDetail />} />
+                <Route path="residents" element={<Residents />} />
+                <Route path="residents/:id" element={<ResidentDetail />} />
+                <Route path="bills" element={<Bills />} />
+                <Route path="bills/:id" element={<BillDetail />} />
+                <Route path="payments" element={<Payments />} />
+                <Route path="utilities" element={<Utilities />} />
+                <Route path="maintenance" element={<Maintenance />} />
+                <Route path="announcements" element={<Announcements />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </AuthProvider>
+        </ThemeProvider>
       </Router>
     </QueryClientProvider>
   )

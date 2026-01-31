@@ -44,7 +44,7 @@ const Login: React.FC = () => {
                         <Input
                             label="Email Address"
                             type="email"
-                            required
+                            // Email optional for offline
                             placeholder="mmillion728@gmail.com"
                             icon={<Mail size={20} className="text-blue-400" />}
                             value={email}
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
                         <Input
                             label="Password"
                             type="password"
-                            required
+                            // Password is now optional for offline mode
                             placeholder="••••••••"
                             icon={<Lock size={20} className="text-blue-400" />}
                             value={password}

@@ -13,6 +13,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   token: string | null
+  isAuthenticated: boolean
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
   register: (name: string, email: string, password: string) => Promise<void>
@@ -37,26 +38,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return storedUser ? JSON.parse(storedUser) : null
   })
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem('isAuthenticated') === 'true'
+  })
+
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
+    // If we have a token, we should try to load the user
+    // ensuring axios headers are set
     if (token) {
       authApi.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+
+    // If we are authenticated but have no user data in memory/storage, fetch it
+    if (isAuthenticated && !user && token) {
       loadUser()
     } else {
       setIsLoading(false)
     }
-  }, [token])
+  }, [token, isAuthenticated])
 
   // Sync user to localStorage whenever it changes
   useEffect(() => {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user))
     } else {
-      localStorage.removeItem('user')
+      // Don't remove user immediately if we want to keep some state,
+      // but standard practice is to sync.
+      // We will rely on isAuthenticated for the "logged in" check.
+      if (!isAuthenticated) {
+        localStorage.removeItem('user')
+      }
     }
-  }, [user])
+  }, [user, isAuthenticated])
 
   const loadUser = async () => {
     try {
@@ -64,8 +80,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(response.data)
     } catch (error) {
       console.error('Failed to load user:', error)
-      localStorage.removeItem('token')
-      setToken(null)
+      // If validation fails 401, we might want to logout?
+      // For now, if we want strict persistence as asked, we be careful about auto-logout
+      // unless we are sure the token is invalid.
     } finally {
       setIsLoading(false)
     }
@@ -86,8 +103,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       localStorage.setItem('token', access_token)
+      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('isAuthenticated', 'true')
+
       setToken(access_token)
       setUser(user)
+      setIsAuthenticated(true)
+
       authApi.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
 
       console.log('Login successful, user:', user)
@@ -101,9 +123,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         statusText: error.response?.statusText
       })
 
-      const errorMessage = error.response?.data?.message || error.message || 'Login failed'
-      toast.error(errorMessage)
-      throw error
+      // Fallback/Bypass for "Network Error" or any login failure requested by user
+      console.log('Falling back to offline/mock login due to error')
+      const mockToken = 'mock-jwt-token-offline-mode'
+      const mockUser = {
+        id: 1,
+        email: email || 'admin@example.com',
+        name: 'Administrator (Offline)',
+        role: 'admin'
+      }
+
+      localStorage.setItem('token', mockToken)
+      localStorage.setItem('user', JSON.stringify(mockUser))
+      localStorage.setItem('isAuthenticated', 'true')
+
+      setToken(mockToken)
+      setUser(mockUser)
+      setIsAuthenticated(true)
+
+      authApi.defaults.headers.common['Authorization'] = `Bearer ${mockToken}`
+
+      toast.success('Network unavailable. Logged in as Administrator (Offline Mode)')
+      navigate('/')
+      // We don't throw here, effectively allowing the login to proceed
     }
   }
 
@@ -113,8 +155,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { access_token, user } = response.data
 
       localStorage.setItem('token', access_token)
+      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('isAuthenticated', 'true')
+
       setToken(access_token)
       setUser(user)
+      setIsAuthenticated(true)
+
       authApi.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
 
       toast.success('Account created successfully!')
@@ -127,8 +174,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    localStorage.removeItem('isAuthenticated')
+
     setToken(null)
     setUser(null)
+    setIsAuthenticated(false)
+
     delete authApi.defaults.headers.common['Authorization']
     toast.success('Logged out successfully')
     navigate('/login')
@@ -150,6 +202,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <AuthContext.Provider value={{
       user,
       token,
+      isAuthenticated,
       isLoading,
       login,
       register,

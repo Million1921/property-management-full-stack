@@ -6,7 +6,7 @@ import Footer from './Footer'
 
 const Layout: React.FC = () => {
     return (
-        <div className="flex min-h-screen bg-gray-50 overflow-hidden">
+        <div className="flex min-h-screen bg-white dark:bg-gray-900 overflow-hidden">
             <Sidebar />
             <div className="flex flex-col flex-1 overflow-hidden">
                 <Header />
