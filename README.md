@@ -62,31 +62,6 @@ property-management-fullstack/
     npm run dev
     ```
 
-## 🔐 Environment Variables
-
-Create a `.env` file in the respective directories:
-
-**Server (`server/.env`)**
-```env
-PORT=3000
-JWT_SECRET=your-secret-key-here
-JWT_EXPIRES_IN=7d
-DATABASE_PATH=./data/house.db
-```
-
-**Client (`.env`)**
-```env
-VITE_API_URL=http://localhost:3000/api
-```
-
-## 🔑 Default Credentials
-
-For testing and initial access:
-- **Email**: `mmillion728@gmail.com`
-- **Password**: `Ti@!$%`
-
----
-
 ## 📚 API Reference
 
 ### Authentication
